@@ -78,12 +78,21 @@ functions:
           path: /user/{userId}
           cors: true
 
+  uploadImage:
+    handler: src/handler/uploadImage.handler
+    events:
+      - http:
+          method: POST
+          path: /user/uploadImage/{id}
+          cors: true
+
   authRegister:
     handler: src/handler/authRegister.handler
     events:
       - http:
           method: POST
           path: /admin/register
+          cors: true
 
   authLogin:
     handler: src/handler/authLogin.handler
@@ -91,13 +100,15 @@ functions:
       - http:
           method: POST
           path: /admin/login
+          cors: true
 
-  uploadImage:
-    handler: src/handler/uploadImage.handler
+  authConfirm:
+    handler: src/handler/authConfirm.handler
     events:
       - http:
           method: POST
-          path: /user/uploadImage/{id}
+          path: /admin/confirm
+          cors: true
 
 custom:
   bundle:
