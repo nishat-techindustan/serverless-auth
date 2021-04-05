@@ -1,0 +1,104 @@
+service:
+  name: user-manage-service
+plugins:
+  - serverless-bundle
+  - serverless-pseudo-parameters
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - arn:aws:dynamodb:us-east-1:152134853155:table/UsersTable
+
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+        - s3:PutObject
+      Resource:
+        - arn:aws:s3:::usersproduct
+
+functions:
+  demo:
+    handler: src/handler/demo.handler
+    events:
+      - http:
+          method: POST
+          path: /demo
+          cors: true
+
+  getUsers:
+    handler: src/handler/getUsers.handler
+    events:
+      - http:
+          method: GET
+          path: /users
+          cors: true
+
+  getUser:
+    handler: src/handler/getUser.handler
+    events:
+      - http:
+          method: GET
+          path: /user/{userId}
+          cors: true
+
+  createUser:
+    handler: src/handler/createUser.handler
+    events:
+      - http:
+          method: POST
+          path: /user
+          cors: true
+
+  updateUser:
+    handler: src/handler/updateUser.handler
+    events:
+      - http:
+          method: PATCH
+          path: /user/{userId}
+          cors: true
+
+  deleteUser:
+    handler: src/handler/deleteUser.handler
+    events:
+      - http:
+          method: DELETE
+          path: /user/{userId}
+          cors: true
+
+  authRegister:
+    handler: src/handler/authRegister.handler
+    events:
+      - http:
+          method: POST
+          path: /admin/register
+
+  authLogin:
+    handler: src/handler/authLogin.handler
+    events:
+      - http:
+          method: POST
+          path: /admin/login
+
+  uploadImage:
+    handler: src/handler/uploadImage.handler
+    events:
+      - http:
+          method: POST
+          path: /user/uploadImage/{id}
+
+custom:
+  bundle:
+    linting: false
