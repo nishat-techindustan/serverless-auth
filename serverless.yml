@@ -26,6 +26,8 @@ provider:
       Action:
         - s3:GetObject
         - s3:PutObject
+        - s3:ListObjects
+        - s3:DeleteObject
       Resource:
         - arn:aws:s3:::usersproduct
 
@@ -108,6 +110,14 @@ functions:
       - http:
           method: POST
           path: /admin/confirm
+          cors: true
+
+  authJwt:
+    handler: src/handler/authJwt.handler
+    events:
+      - http:
+          method: GET
+          path: /admin/jwt
           cors: true
 
 custom:
